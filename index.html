@@ -2,9 +2,14 @@
   <head>
     <meta charset="utf-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      canvas {
+        background: #000;
+      }
+    </style>
   </head>
   <body>
-    <p>Dark Side of The Moon</p>
+    <canvas id="canvas"></canvas>
     <div class="build">Build: <%= htmlWebpackPlugin.options.version %></div>
   </body>
 </html>
