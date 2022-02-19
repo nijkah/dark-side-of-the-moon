@@ -66,7 +66,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
-      title: "jsrlt",
+      title: "Dark Side of the Moon",
       template: "index.html",
       version: gitRevisionPlugin.commithash().slice(0, 7),
     }),
