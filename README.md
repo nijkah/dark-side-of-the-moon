@@ -1,5 +1,6 @@
 # Dark Side of the Moon
-When mother raids Ghouls on the dark side of the moon
+When mother raids Ghouls on the dark side of the moon.
+
 Click [here](https://nijkah.github.io/dark-side-of-the-moon/)
 
 
