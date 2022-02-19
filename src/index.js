@@ -1,16 +1,16 @@
 import "./lib/canvas.js";
-import { clearCanvas, drawChar } from "./lib/canvas";
+import { createDungeon } from "./lib/dungeon";
+import { movement } from "./systems/movement";
+import { redner, render } from "./systems/render";
+import { player } from "./state/ecs";
+import { Move } from "./state/components";
 
-const player = {
-    char: "@",
-    color: "white",
-    position: {
-        x: 0,
-        y: 0,
-    },
-};
+// init game map and player position
+const dungeon = createDungeon();
+player.position.x = dungeon.center.x;
+player.position.y = dungeon.center.y;
 
-drawChar(player);
+render();
 
 let userInput = null;
 
@@ -21,18 +21,18 @@ document.addEventListener("keydown", (ev) => {
 
 const processUserInput = () => {
     if (userInput === "k") {
-        player.position.y -= 1;
+        player.add(Move, { x: 0, y: -1 });
     }
     if (userInput === "l") {
-        player.position.x += 1;
+        player.add(Move, { x: 1, y: 0 });
     }
     if (userInput === "j") {
-        player.position.y += 1;
+        player.add(Move, { x: 0, y: 1 });
     }
     if (userInput === "h") {
-        player.position.x -= 1;
+        player.add(Move, { x: -1, y: 0 });
     }
 
-    clearCanvas();
-    drawChar(player);
+    movement();
+    render();
 };
