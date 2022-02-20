@@ -1,7 +1,7 @@
 import { random, times } from "lodash";
 import world from "../state/ecs";
 import { rectangle, rectsIntersect } from "./grid";
-import { Appearance, IsBlocking, Layer100, Position } from "../state/components";
+import { Appearance, IsBlocking, IsOpaque, Layer100, Position } from "../state/components";
 
 function digHorizontalPassage(x1, x2, y) {
     const tiles = {};
@@ -99,6 +99,7 @@ export const createDungeon = ({
             const entity = world.createEntity();
             entity.add(Appearance, { char: "#", color: "#AAA" });
             entity.add(IsBlocking);
+            entity.add(IsOpaque);
             entity.add(Layer100);
             entity.add(Position, dungeon.tiles[key]);
         }

@@ -1,4 +1,5 @@
 import world from '../state/ecs';
+import { addCacheSet, deleteCacheSet, readCacheSet } from "../state/cache";
 import { grid } from "../lib/canvas";
 import { Move } from '../state/components';
 
@@ -27,6 +28,13 @@ export const movement = () => {
         entity.remove(entity.move);
         return;
     }
+
+    deleteCacheSet(
+        "entitiesAtLocation",
+        `${entity.position.x},${entity.position.y}`,
+        entity.id
+    );
+    addCacheSet("entitiesAtLocation", `${mx},${my}`, entity.id);
 
     entity.position.x = mx;
     entity.position.y = my;
