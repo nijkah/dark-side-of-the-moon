@@ -41,3 +41,26 @@ export const drawChar = ({ char, color, position }) => {
 
 export const clearCanvas = () =>
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+const drawBackground = ({ color, position }) => {
+  if (color === "transparent") return;
+
+  ctx.fillStyle = color;
+
+  ctx.fillRect(
+    position.x * cellWidth,
+    position.y * cellHeight,
+    cellWidth,
+    cellHeight
+  );
+};
+
+export const drawCell = (entity, options = {}) => {
+  const char = options.char || entity.appearance.char;
+  const background = options.background || entity.appearance.background;
+  const color = options.color || entity.appearance.color;
+  const position = entity.position;
+
+  drawBackground({ color: background, position });
+  drawChar({ char, color, position });
+};

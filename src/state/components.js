@@ -2,8 +2,9 @@ import { Component } from 'geotic';
 
 export class Appearance extends Component {
     static properties = {
-        color: '#ff0077',
-        char: '?',
+        color: "#ff0077",
+        char: "?",
+        background: "#000",
     };
 }
 
@@ -16,3 +17,9 @@ export class Move extends Component {
 export class Position extends Component {
     static properties = { x: 0, y: 0 };
 }
+
+export class Layer100 extends Component {}
+
+export class Layer300 extends Component {}
+
+export class Layer400 extends Component {}
