@@ -17,10 +17,10 @@ const attack = (entity, target) => {
     kill(target);
 
     return console.log(
-      `You kicked a ${target.description.name} for ${damage} damage and killed it!`
+      `${entity.description.name} kicked a ${target.description.name} for ${damage} damage and killed it!`
     );
   }
-  console.log(`You kicked a ${target.description.name} for ${damage} damage!`);
+  console.log(`${entity.description.name} kicked a ${target.description.name} for ${damage} damage!`);
 };
 
 const kill = (entity) => {

@@ -10,9 +10,9 @@ import { movement } from "./systems/movement";
 import { render } from "./systems/render";
 import world from "./state/ecs";
 import {
-    Move,
     Position
 } from "./state/components";
+import { processUserInput } from "./lib/user-input.js";
 
 // init game map and player position
 const dungeon = createDungeon({
@@ -47,42 +47,13 @@ document.addEventListener("keydown", (ev) => {
     userInput = ev.key;
 });
 
-const processUserInput = () => {
-    if (userInput === "k" || userInput === "ArrowUp") {
-        player.add(Move, { x: 0, y: -1 });
-    }
-    if (userInput === "l" || userInput === "ArrowRight") {
-        player.add(Move, { x: 1, y: 0 });
-    }
-    if (userInput === "j" || userInput === "ArrowDown") {
-        player.add(Move, { x: 0, y: 1 });
-    }
-    if (userInput === "h" || userInput === "ArrowLeft") {
-        player.add(Move, { x: -1, y: 0 });
-    }
-    if (userInput === "y") {
-        player.add(Move, { x: -1, y: -1 });
-    }
-    if (userInput === "u") {
-        player.add(Move, { x: 1, y: -1 });
-    }
-    if (userInput === "b") {
-        player.add(Move, { x: -1, y: 1 });
-    }
-    if (userInput === "n") {
-        player.add(Move, { x: 1, y: 1 });
-    }
-
-    userInput = null;
-};
-
 const update = () => {
     if (player.isDead) {
         return;
     }
     if (playerTurn && userInput) {
         console.log('I am @, hear me roar.');
-        processUserInput();
+        userInput = processUserInput(player, userInput);
         movement();
         fov(player);
         render();
@@ -110,22 +81,22 @@ requestAnimationFrame(gameLoop);
 // Only do this during development
 if (process.env.NODE_ENV === "development") {
     const canvas = document.querySelector("#canvas");
-  
+
     canvas.onclick = (e) => {
-      const [x, y] = pxToCell(e);
-      const locId = toLocId({ x, y });
-  
-      readCacheSet("entitiesAtLocation", locId).forEach((eId) => {
-        const entity = world.getEntity(eId);
-  
-        console.log(
-          `${get(entity, "appearance.char", "?")} ${get(
-            entity,
-            "description.name",
-            "?"
-          )}`,
-          entity.serialize()
-        );
-      });
+        const [x, y] = pxToCell(e);
+        const locId = toLocId({ x, y });
+
+        readCacheSet("entitiesAtLocation", locId).forEach((eId) => {
+            const entity = world.getEntity(eId);
+
+            console.log(
+                `${get(entity, "appearance.char", "?")} ${get(
+                    entity,
+                    "description.name",
+                    "?"
+                )}`,
+                entity.serialize()
+            );
+        });
     };
-  }
+}
