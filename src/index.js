@@ -48,16 +48,16 @@ document.addEventListener("keydown", (ev) => {
 });
 
 const processUserInput = () => {
-    if (userInput === "k") {
+    if (userInput === "k" || userInput === "ArrowUp") {
         player.add(Move, { x: 0, y: -1 });
     }
-    if (userInput === "l") {
+    if (userInput === "l" || userInput === "ArrowRight") {
         player.add(Move, { x: 1, y: 0 });
     }
-    if (userInput === "j") {
+    if (userInput === "j" || userInput === "ArrowDown") {
         player.add(Move, { x: 0, y: 1 });
     }
-    if (userInput === "h") {
+    if (userInput === "h" || userInput === "ArrowLeft") {
         player.add(Move, { x: -1, y: 0 });
     }
     if (userInput === "y") {
