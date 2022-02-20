@@ -64,3 +64,13 @@ export const drawCell = (entity, options = {}) => {
   drawBackground({ color: background, position });
   drawChar({ char, color, position });
 };
+
+export const pxToCell = (ev) => {
+  const bounds = canvas.getBoundingClientRect();
+  const relativeX = ev.clientX - bounds.left;
+  const relativeY = ev.clientY - bounds.top;
+  const colPos = Math.trunc((relativeX / cellWidth) * pixelRatio);
+  const rowPos = Math.trunc((relativeY / cellHeight) * pixelRatio);
+
+  return [colPos, rowPos];
+};

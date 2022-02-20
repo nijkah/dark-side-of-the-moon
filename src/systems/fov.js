@@ -1,22 +1,22 @@
 import { readCacheSet } from "../state/cache";
-import ecs, { player } from "../state/ecs";
+import world from "../state/ecs";
 import { grid } from "../lib/canvas";
 import createFOV from "../lib/fov";
 import { IsInFov, IsOpaque, IsRevealed } from "../state/components";
 
-const inFovEntities = ecs.createQuery({
+const inFovEntities = world.createQuery({
     all: [IsInFov],
 });
 
-const opaqueEntities = ecs.createQuery({
+const opaqueEntities = world.createQuery({
     all: [IsOpaque],
 });
 
-export const fov = () => {
+export const fov = (origin) => {
     const { width, height } = grid;
 
-    const originX = player.position.x;
-    const originY = player.position.y;
+    const originX = origin.position.x;
+    const originY = origin.position.y;
 
     const FOV = createFOV(opaqueEntities, width, height, originX, originY, 10);
 
@@ -28,7 +28,7 @@ export const fov = () => {
 
         if (entitiesAtLoc) {
             entitiesAtLoc.forEach((eId) => {
-                const entity = ecs.getEntity(eId);
+                const entity = world.getEntity(eId);
                 entity.add(IsInFov);
 
                 if (!entity.has(IsRevealed)) {

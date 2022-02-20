@@ -17,6 +17,8 @@ export class Description extends Component {
 
 export class IsBlocking extends Component { }
 
+export class IsDead extends Component { }
+
 export class IsInFov extends Component { }
 
 export class IsOpaque extends Component { }
@@ -24,7 +26,7 @@ export class IsOpaque extends Component { }
 export class IsRevealed extends Component { }
 
 export class Move extends Component {
-    static properties = { x: 0, y: 0 };
+    static properties = { x: 0, y: 0, relative: true };
 }
 
 export class Position extends Component {
@@ -35,9 +37,3 @@ export class Position extends Component {
         addCacheSet("entitiesAtLocation", locId, this.entity.id);
     }
 }
-
-export class Layer100 extends Component { }
-
-export class Layer300 extends Component { }
-
-export class Layer400 extends Component { }

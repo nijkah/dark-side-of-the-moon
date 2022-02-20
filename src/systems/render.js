@@ -4,10 +4,8 @@ import {
     IsInFov,
     IsRevealed,
     Position,
-    Layer100,
-    Layer300,
-    Layer400,
 } from "../state/components";
+import { Layer100, Layer300, Layer400 } from "../state/layers"
 import { clearCanvas, drawCell } from "../lib/canvas";
 
 const layer100Entities = world.createQuery({

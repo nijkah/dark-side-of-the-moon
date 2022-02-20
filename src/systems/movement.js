@@ -1,16 +1,48 @@
 import world from '../state/ecs';
 import { addCacheSet, deleteCacheSet, readCacheSet } from "../state/cache";
 import { grid } from "../lib/canvas";
-import { Move } from '../state/components';
+import { Ai, IsBlocking, IsDead, Move } from '../state/components';
+import { Layer300, } from "../state/layers"; 
+import { Health, Defense } from "../state/combat";
 
 const movableEntities = world.createQuery({
   all: [Move],
 });
 
+const attack = (entity, target) => {
+  const damage = Math.max(entity.power.current - target.defense.current, 0);
+  target.fireEvent("take-damage", { amount: damage });
+
+  if (target.health.current <= 0) {
+    kill(target);
+
+    return console.log(
+      `You kicked a ${target.description.name} for ${damage} damage and killed it!`
+    );
+  }
+  console.log(`You kicked a ${target.description.name} for ${damage} damage!`);
+};
+
+const kill = (entity) => {
+  entity.appearance.char = "%";
+  if (entity.has(Ai) && entity.has(IsBlocking)) {
+    entity.remove(entity.ai);
+    entity.remove(entity.isBlocking);
+  }
+  entity.add(IsDead);
+  entity.remove(entity.layer400);
+  entity.add(Layer300);
+};
+
 export const movement = () => {
   movableEntities.get().forEach((entity) => {
-    let mx = entity.position.x + entity.move.x;
-    let my = entity.position.y + entity.move.y;
+    let mx = entity.move.x;
+    let my = entity.move.y;
+    
+    if (entity.move.relative) {
+      mx = entity.position.x + entity.move.x;
+      my = entity.position.y + entity.move.y;
+    }
 
     // this is where we will run any checks to see if entity can move to new location
     // observe map boundaries
@@ -30,12 +62,14 @@ export const movement = () => {
 
     if (blockers.length) {
       blockers.forEach((eId) => {
-        const attacker =
-          (entity.description && entity.description.name) || "something";
-        const target =
-          (world.getEntity(eId).description && world.getEntity(eId).description.name) ||
-          "something";
-        console.log(`${attacker} kicked a ${target}!`);
+        const target = world.getEntity(eId);
+        if (target.has(Health) && target.has(Defense)) {
+          attack(entity, target);
+        } else {
+          console.log(
+            `${entity.description.name} bump into a ${target.description.name}`
+          );
+        }
       });
 
       entity.remove(entity.move);

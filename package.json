@@ -35,6 +35,7 @@
   "dependencies": {
     "geotic": "4.1.6",
     "jshint": "2.13.4",
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "pathfinding": "0.4.18"
   }
 }

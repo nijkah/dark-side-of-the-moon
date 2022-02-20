@@ -1,18 +1,15 @@
-import { sample, times } from "lodash";
+import { get, sample, times } from "lodash";
 import "./lib/canvas.js";
-import { grid } from "././lib/canvas";
+import { grid, pxToCell } from "././lib/canvas";
+import { toLocId } from "./lib/grid";
+import { readCacheSet } from "./state/cache";
 import { createDungeon } from "./lib/dungeon";
 import { ai } from "./systems/ai";
 import { fov } from "./systems/fov";
 import { movement } from "./systems/movement";
 import { render } from "./systems/render";
-import world, { player } from "./state/ecs";
+import world from "./state/ecs";
 import {
-    Ai,
-    Appearance,
-    Description,
-    IsBlocking,
-    Layer400,
     Move,
     Position
 } from "./state/components";
@@ -24,6 +21,8 @@ const dungeon = createDungeon({
     width: grid.map.width,
     height: grid.map.height,
 });
+
+const player = world.createPrefab("Player");
 player.add(Position, {
     x: dungeon.rooms[0].center.x,
     y: dungeon.rooms[0].center.y,
@@ -35,17 +34,10 @@ const openTiles = Object.values(dungeon.tiles).filter(
 
 times(5, () => {
     const tile = sample(openTiles);
-
-    const goblin = world.createEntity();
-    goblin.add(Ai);
-    goblin.add(Appearance, { char: "g", color: "green" });
-    goblin.add(Description, { name: "goblin" });
-    goblin.add(IsBlocking);
-    goblin.add(Layer400);
-    goblin.add(Position, { x: tile.x, y: tile.y });
+    world.createPrefab("Ghoul").add(Position, { x: tile.x, y: tile.y });
 });
 
-fov();
+fov(player);
 render();
 
 let userInput = null;
@@ -85,20 +77,23 @@ const processUserInput = () => {
 };
 
 const update = () => {
+    if (player.isDead) {
+        return;
+    }
     if (playerTurn && userInput) {
         console.log('I am @, hear me roar.');
         processUserInput();
         movement();
-        fov();
+        fov(player);
         render();
 
         playerTurn = false;
     }
 
     if (!playerTurn) {
-        ai();
+        ai(player);
         movement();
-        fov();
+        fov(player);
         render();
 
         playerTurn = true;
@@ -111,3 +106,26 @@ const gameLoop = () => {
 };
 
 requestAnimationFrame(gameLoop);
+
+// Only do this during development
+if (process.env.NODE_ENV === "development") {
+    const canvas = document.querySelector("#canvas");
+  
+    canvas.onclick = (e) => {
+      const [x, y] = pxToCell(e);
+      const locId = toLocId({ x, y });
+  
+      readCacheSet("entitiesAtLocation", locId).forEach((eId) => {
+        const entity = world.getEntity(eId);
+  
+        console.log(
+          `${get(entity, "appearance.char", "?")} ${get(
+            entity,
+            "description.name",
+            "?"
+          )}`,
+          entity.serialize()
+        );
+      });
+    };
+  }
