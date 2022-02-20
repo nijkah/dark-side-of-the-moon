@@ -1,4 +1,4 @@
-import ecs from "../state/ecs";
+import world from "../state/ecs";
 import {
     Appearance,
     IsInFov,
@@ -10,17 +10,17 @@ import {
 } from "../state/components";
 import { clearCanvas, drawCell } from "../lib/canvas";
 
-const layer100Entities = ecs.createQuery({
+const layer100Entities = world.createQuery({
     all: [Position, Appearance, Layer100],
     any: [IsInFov, IsRevealed],
 });
 
-const layer300Entities = ecs.createQuery({
+const layer300Entities = world.createQuery({
     all: [Position, Appearance, Layer300],
     any: [IsInFov, IsRevealed],
 });
 
-const layer400Entities = ecs.createQuery({
+const layer400Entities = world.createQuery({
     all: [Position, Appearance, Layer400, IsInFov],
 });
 

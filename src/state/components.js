@@ -1,12 +1,18 @@
 import { Component } from 'geotic';
 import { addCacheSet } from "./cache";
 
+export class Ai extends Component { }
+
 export class Appearance extends Component {
     static properties = {
         color: "#ff0077",
         char: "?",
         background: "#000",
     };
+}
+
+export class Description extends Component {
+    static properties = { name: "No Name" };
 }
 
 export class IsBlocking extends Component { }

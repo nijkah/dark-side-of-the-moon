@@ -19,20 +19,33 @@ export const movement = () => {
 
     // check for blockers
     const blockers = [];
-    for (const e of world.getEntities()) {
-        if (e.position.x === mx && e.position.y === my && e.isBlocking) {
-            blockers.push(e);
-        }
+    // read from cache
+    const entitiesAtLoc = readCacheSet("entitiesAtLocation", `${mx},${my}`);
+
+    for (const eId of entitiesAtLoc) {
+      if (world.getEntity(eId).isBlocking) {
+        blockers.push(eId);
+      }
     }
+
     if (blockers.length) {
-        entity.remove(entity.move);
-        return;
+      blockers.forEach((eId) => {
+        const attacker =
+          (entity.description && entity.description.name) || "something";
+        const target =
+          (world.getEntity(eId).description && world.getEntity(eId).description.name) ||
+          "something";
+        console.log(`${attacker} kicked a ${target}!`);
+      });
+
+      entity.remove(entity.move);
+      return;
     }
 
     deleteCacheSet(
-        "entitiesAtLocation",
-        `${entity.position.x},${entity.position.y}`,
-        entity.id
+      "entitiesAtLocation",
+      `${entity.position.x},${entity.position.y}`,
+      entity.id
     );
     addCacheSet("entitiesAtLocation", `${mx},${my}`, entity.id);
 
