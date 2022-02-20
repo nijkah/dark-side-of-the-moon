@@ -50,5 +50,9 @@ ecs.registerPrefab(Floor);
 ecs.registerPrefab(Ghoul);
 ecs.registerPrefab(Player);
 
+export const messageLog = ["", "Welcome to Dark Side of the Moon.", ""];
+export const addLog = (text) => {
+    messageLog.unshift(text);
+};
 
 export default world;

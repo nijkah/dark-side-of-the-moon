@@ -38,7 +38,7 @@ times(5, () => {
 });
 
 fov(player);
-render();
+render(player);
 
 let userInput = null;
 let playerTurn = true;
@@ -56,7 +56,7 @@ const update = () => {
         userInput = processUserInput(player, userInput);
         movement();
         fov(player);
-        render();
+        render(player);
 
         playerTurn = false;
     }
@@ -65,7 +65,7 @@ const update = () => {
         ai(player);
         movement();
         fov(player);
-        render();
+        render(player);
 
         playerTurn = true;
     }
